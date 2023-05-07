@@ -1,7 +1,7 @@
-# MRI_SEGMENTATION
+# MRI_segmentation
 ## README
 
-Implementations of the PRESENT algorithm for a Rasberry Pi PICO
+Segmentation tasks on provided brain MRI scans 
 
 ### Summary
 
