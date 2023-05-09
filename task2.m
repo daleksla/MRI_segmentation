@@ -7,7 +7,7 @@
 %%% Check that task1.m was run (or rather, that we have it's outputs)
 %%% Then load slices - we want label this time
 
-if ~exist('threshold_slices','var') || ~exist('kmeans_slices', 'var')
+if ~exist('threshold_slices','var') || ~exist('kmeans_slices', 'var') % we need segmented slices
     quit(1, "Segmented slices not available for analysis")
 end
 
