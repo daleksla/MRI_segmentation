@@ -1,8 +1,18 @@
+%%% Task 1 %%%
+%%% Develop and apply different segmentation algorithms, based on any
+%%% technique you have learnt to each slice of the MRI data
+%%% You need to apply exactly the same algorithm to every slice
+%%% HINT: This will more than likely be a combination of different techniques
+%%% Note: we want 5 tissue layers (6 layers total inc. air aka our
+%%% background)
+
 %% Initialisation
+%%% Clear environment, close all existing figures, load data
+%%% Also set default constants
 
 clear
-close all
-load("resources/Brain.mat"); % loads data 
+close("all");
+slices = load("resources/Brain.mat"); % loads data 
 % T1 brought into environment - contains all our slices
 % Index T1 using T1(:,:,i) to get each slice, where i is the index (1-10)
 % label contains the data pre-segmented
@@ -11,14 +21,12 @@ load("resources/Brain.mat"); % loads data
 WAIT_TIME = 1;
 
 %% Calling Segmentation Algorithms
-%%% Develop and apply different segmentation algorithms, based on any
-%%% technique you have learnt to each slice of the MRI data
-%%% You need to apply exactly the same algorithm to every slice
-%%% HINT: This will more than likely be a combination of different techniques
-%%% Note: we want 5 tissue layers (6 layers total inc. air aka our
-%%% background)
+%%% Using *region-based* segmentation functionality only
+%%% Boundary-based would just give a border, but not our specified and overlapping regions
+%%% Selected: Otsu's multi-level thresholding, Region Growing, ???
 
-% threshold_slices = segment_2d_slices(T1, @wthreshold, WAIT_TIME); % apply Otsu's thresholding (note @ needed to pass functions)
+threshold_slices = segment_2d_slices(slices.T1, @wthreshold, WAIT_TIME); % apply Otsu's thresholding (note @ needed to pass functions)
+kmeans_slices = segment_2d_slices(slices.T1, @wkmeansclustering, WAIT_TIME); % apply Otsu's thresholding (note @ needed to pass functions)
 
 function [modified_slices] = segment_2d_slices(original_slices, segmentation_algorithm, wait_time)
 %SEGMENT_SLICES Meta function to apply, display and return segmentated slices as a result of a supplied algorithm
