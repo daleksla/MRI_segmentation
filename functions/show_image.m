@@ -12,3 +12,4 @@ function [fig] = show_image(img, fig_name)
     fig = figure('Name', fig_name); % creates a new Figure window
     colormap(gray);
     imagesc(img);
+end
