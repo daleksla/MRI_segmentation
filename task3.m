@@ -13,15 +13,6 @@ end
 
 slices = load("resources/Brain.mat"); % load slices
 
-%% Acquire 3D image
-%%% Use image registration algorithm to shift image
-%%% We use ??? as our technique to create a 3d atlas of raw slices & pre-segmented regions
-%%% We need our raw segmented slices to be stitched so we can segment them
-%%% with possible new outlooks, and the pre-segmented slices for later
-%%% comparison
-
-...
-
 %% Calling 3D-Segmentation Algorithm
 %%% We use the thresholding & K-means clustering technique (again)
 %%% This time, we create the regions / segments for our single 3D MRI
