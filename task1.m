@@ -27,4 +27,4 @@ REGION_NO = 5;
 %%% Selected: Otsu's multi-level thresholding, K-means clustering
 
 threshold_slices = segment_slices(slices.T1, @wthreshold, REGION_NO, WAIT_TIME); % apply Otsu's thresholding (note @ needed to pass functions)
-kmeans_slices = segment_slices(slices.T1, @wkmeansclustering, REGION_NO, WAIT_TIME); % apply Otsu's thresholding (note @ needed to pass functions)
+kmeans_slices = segment_slices(slices.T1, @wkmeansclustering, REGION_NO, WAIT_TIME);
