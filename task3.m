@@ -7,13 +7,14 @@
 %%% Check that task2.m was run (or rather, that we have it's outputs)
 %%% Then load slices - we want label AND t1 this time
 
-if ~exist('threshold_performance','var') || ~exist('kmeans_performance', 'var') % we need evaluation results
+if ~exist('threshold_score','var') || ~exist('kmeans_score', 'var') % we need evaluation results
     quit(1, "Performance of segmentation algorithms slices not available for comparison")
 end
 
 slices = load("resources/Brain.mat"); % load slices
 
-%% Apply image registration algorithm
+%% Acquire 3D image
+%%% Use image registration algorithm to shift image
 %%% We use ??? as our technique to create a 3d atlas of raw slices & pre-segmented regions
 %%% We need our raw segmented slices to be stitched so we can segment them
 %%% with possible new outlooks, and the pre-segmented slices for later
@@ -22,7 +23,11 @@ slices = load("resources/Brain.mat"); % load slices
 ...
 
 %% Calling 3D-Segmentation Algorithm
-%%% We use the ??? technique to create regions / segment our single 3D MRI
+%%% We use the thresholding & K-means clustering technique (again)
+%%% This time, we create the regions / segments for our single 3D MRI
+
+threshold3d_slice = wthreshold(slices.T1, REGION_NO);
+kmeans3d_slice = wkmeansclustering(slices.T1, REGION_NO);
 
 %% Calling evaluation algorithm
 %%% We use the same metric - sensitivity and specificity - to generate an
@@ -31,11 +36,11 @@ slices = load("resources/Brain.mat"); % load slices
 %%% Finally, we can compare the results to the performance of our previous
 %%% algorithms
 
-...
+threshold3d_slice = categorical(threshold3d_slice, 0:REGION_NO); % make categorical
+kmeans3d_slice = categorical(kmeans3d_slice, 0:REGION_NO);
 
-function [average_metric] = evaluate_performance(segmented_slice, truth_slice)
-%EVALUATE_PERFORMANCE Meta function to create confusion matrix between
-%ground truth and algorithm x's segmentation result. We then extract and
-%average the sensitivity and specificity values
-    ...
-end
+[threshold3d_sensitivity, threshold3d_specificity, threshold3d_score] = group_performance(threshold3d_slice, c_label);
+[kmeans3d_sensitivity, kmeans3d_specificity, kmeans3d_score] = group_performance(kmeans3d_slice, c_label);
+
+fprintf("Average 3D threshold sensitivity: %f, 3D threshold specificity: %f\n", threshold3d_sensitivity, threshold3d_specificity);
+fprintf("Average 3D k-means sensitivity: %f, 3D k-means specificity: %f\n", kmeans3d_sensitivity, kmeans3d_specificity);

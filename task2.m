@@ -13,15 +13,21 @@ end
 
 slices = load("resources/Brain.mat"); % load slices
 
+if ~iscategorical(threshold_slices)
+    threshold_slices = categorical(threshold_slices, 0:REGION_NO); % convert to categorical type - needed format as single is not acceptable
+end
+
+if ~iscategorical(kmeans_slices)
+    kmeans_slices = categorical(kmeans_slices, 0:REGION_NO);
+end
+
+c_label = categorical(slices.label, 0:REGION_NO); % also make ground truth values categorical (interpretted as mat of 2d mat of singles otherwise)
+
 %% Calling evaluation algorithm
 %%% Using sensitivity & sensitivity as our metric
 
-threshold_performance = evaluate_performance(threshold_slices, label);
-kmeans_performance = evaluate_performance(kmeans_slices, label);
+[threshold_sensitivity, threshold_specificity, threshold_score] = group_performance(threshold_slices, c_label);
+[kmeans_sensitivity, kmeans_specificity, kmeans_score] = group_performance(kmeans_slices, c_label);
 
-function [average_metric] = evaluate_performance(segmented_slice, truth_slice)
-%EVALUATE_PERFORMANCE Meta function to create confusion matrix between
-%ground truth and algorithm x's segmentation result. We then extract and
-%average the sensitivity and specificity values
-    ...
-end
+fprintf("Average threshold sensitivity: %f, threshold specificity: %f\n", threshold_sensitivity, threshold_specificity);
+fprintf("Average k-means sensitivity: %f, k-means specificity: %f\n", kmeans_sensitivity, kmeans_specificity);

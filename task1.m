@@ -18,27 +18,13 @@ slices = load("resources/Brain.mat"); % loads data
 % label contains the data pre-segmented
 % index label similarly to T1
 
-WAIT_TIME = 1;
+WAIT_TIME = 0;
+REGION_NO = 5;
 
 %% Calling Segmentation Algorithms
 %%% Using *region-based* segmentation functionality only
 %%% Boundary-based would just give a border, but not our specified and overlapping regions
-%%% Selected: Otsu's multi-level thresholding, Region Growing, ???
+%%% Selected: Otsu's multi-level thresholding, K-means clustering
 
-threshold_slices = segment_2d_slices(slices.T1, @wthreshold, WAIT_TIME); % apply Otsu's thresholding (note @ needed to pass functions)
-kmeans_slices = segment_2d_slices(slices.T1, @wkmeansclustering, WAIT_TIME); % apply Otsu's thresholding (note @ needed to pass functions)
-
-function [modified_slices] = segment_2d_slices(original_slices, segmentation_algorithm, wait_time)
-%SEGMENT_SLICES Meta function to apply, display and return segmentated slices as a result of a supplied algorithm
-    if ~exist('wait_time','var')
-        wait_time = 0;
-    end
-
-    modified_slices = original_slices; % We create copies of the slices, so that we can modify each and cmp later
-    for i = 1:size(modified_slices, 3) % loop over all slices (image is 2d, so 1D mat of mat is 3d)
-        modified_slices(:, :, i) = segmentation_algorithm(modified_slices(:, :, i)); % overwrite old slice with result of segmentation
-        img = show_image(modified_slices(:, :, i), sprintf("Slice #%d",  i));
-        pause(wait_time);
-        close(img);
-    end
-end
+threshold_slices = segment_slices(slices.T1, @wthreshold, REGION_NO, WAIT_TIME); % apply Otsu's thresholding (note @ needed to pass functions)
+kmeans_slices = segment_slices(slices.T1, @wkmeansclustering, REGION_NO, WAIT_TIME); % apply Otsu's thresholding (note @ needed to pass functions)
